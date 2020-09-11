@@ -1,9 +1,10 @@
-FROM maven:3.5.4-jdk-10-slim
-WORKDIR /usr/src/java-code
-COPY . /usr/src/java-code/
-RUN mvn clean install
+FROM maven:3.3-jdk-8 as builder
+COPY . /usr/src/mymaven/
+WORKDIR /usr/src/mymaven/
+RUN mvn clean package
 
-WORKDIR /usr/src/java-app
-RUN cp /usr/src/java-code/target/*.jar ./app.jar
+FROM tomcat:7-jre7-alpine
+RUN rm -rf /usr/local/tomcat/webapps/*
+COPY --from=builder /usr/src/mymaven/target/*.war /usr/local/tomcat/webapps/ROOT.war
+WORKDIR /usr/local/tomcat/webapps/
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
