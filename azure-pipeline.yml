@@ -2,7 +2,7 @@ trigger:
 - master
 
 variables:
-  imageRepository: 'spring-boot-hola-docker'
+  imageRepository: 'spring-jpetstore'
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
 
